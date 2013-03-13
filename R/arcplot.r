@@ -247,7 +247,8 @@ arcplot <- function(
     # add node names with mtext
     if (show.labels) {
       text(centers,-0.015,labels=labels,  cex=cex.labels, 
-           col=col.labels, srt=srt, font=font, adj=adj, offset=offset ,xpd = xpd, ...)    
+           col=col.labels, srt=srt, font = font, adj = adj, 
+           offset = offset ,xpd = xpd, pos = pos,...)    
     }    
   }
   
@@ -282,7 +283,8 @@ arcplot <- function(
     # add node labels with mtext
     if (show.labels) {
       text(-0.015,centers,labels=labels,  cex=cex.labels, 
-            col=col.labels, srt=srt, font=font, adj=adj, offset = offset , pos = pos,xpd = xpd,...)    
+            col=col.labels, srt=srt, font=font, adj=adj, 
+            offset = offset , pos = pos ,xpd = xpd,...)    
     }
   }
 
