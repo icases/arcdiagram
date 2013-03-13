@@ -125,7 +125,7 @@
   The arcs are scaled such that they fit in a plot region
   with its x-axis ranging from zero to one. Node symbols
   and labels can be optionally displayed. Node symbols are
-  displayed through the function \code{link{\points}}. In
+  displayed through the function \code{\link{\points}}. In
   turn, node labels are displayed through the function
   \code{\link{text}}.
 }
