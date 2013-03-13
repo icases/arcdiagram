@@ -48,8 +48,11 @@
 #'@param offset when pos is specified, this value gives the offset of the label 
 #'from the specified coordinate in fractions of a character width.
 #'@param axes logical indicating whether to plot the axes (default \code{FALSE})
+#'@param xpd A logical value or NA. If FALSE, all plotting is clipped to the plot region, 
+#'if TRUE, all plotting is clipped to the figure region, and if NA, all plotting is clipped
+#' to the device region, default to NA (see \code{\link{par}}).
 #'@param ... further graphical parameters (see \code{\link{par}}), including
-#'\code{family}, \code{xpd}, \code{main}, \code{asp}, etc.
+#'\code{family},  \code{main}, \code{asp}, etc.
 #'@author Gaston Sanchez
 #'@seealso \code{\link{xynodes}}
 #'@export
@@ -89,7 +92,7 @@ arcplot <- function(
   col.nodes = "gray80", bg.nodes = "gray80", lwd.nodes = 1,
   show.labels = TRUE, labels = NULL, col.labels = "gray55",
   cex.labels = 0.9, srt = 2, font = 1, 
-   adj = NULL, pos=NULL,offset=0, axes=FALSE, ...)
+   adj = NULL, pos=NULL,offset=0, axes=FALSE, xpd=NA ,...)
 {
   # ======================================================
   # Checking arguments
@@ -244,7 +247,7 @@ arcplot <- function(
     # add node names with mtext
     if (show.labels) {
       text(centers,-0.015,labels=labels,  cex=cex.labels, 
-           col=col.labels, srt=srt, font=font, adj=adj, offset=offset ,xpd=NA, ...)    
+           col=col.labels, srt=srt, font=font, adj=adj, offset=offset ,xpd = xpd, ...)    
     }    
   }
   
@@ -279,7 +282,7 @@ arcplot <- function(
     # add node labels with mtext
     if (show.labels) {
       text(-0.015,centers,labels=labels,  cex=cex.labels, 
-            col=col.labels, srt=srt, font=font, adj=adj, offset = offset , pos = pos,xpd=NA,...)    
+            col=col.labels, srt=srt, font=font, adj=adj, offset = offset , pos = pos,xpd = xpd,...)    
     }
   }
 
