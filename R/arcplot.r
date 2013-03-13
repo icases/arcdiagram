@@ -91,8 +91,8 @@ arcplot <- function(
   show.nodes = FALSE, pch.nodes = 19, cex.nodes = 1, 
   col.nodes = "gray80", bg.nodes = "gray80", lwd.nodes = 1,
   show.labels = TRUE, labels = NULL, col.labels = "gray55",
-  cex.labels = 0.9, srt = 2, font = 1, 
-   adj = NULL, pos=NULL,offset=0, axes=FALSE, xpd=NA ,...)
+  cex.labels = 0.9, srt = 90, font = NULL, adj = NULL,
+    pos=NULL,offset=0.5, axes=FALSE, xpd=NA ,...)
 {
   # ======================================================
   # Checking arguments
