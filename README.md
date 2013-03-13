@@ -34,23 +34,25 @@ star_edges
 arcplot(star_edges)
 
 # plot 2: show nodes as circles, in decreasing order
-arcplot(star_edges, show.nodes=TRUE, sorted=TRUE, decreasing=TRUE, las=1)
+arcplot(star_edges, show.nodes=TRUE, sorted=TRUE, decreasing=TRUE)
 
 # plot 3: different ordering, arc widths, arc colors, and node sizes
-set.seed(120)
+set.seed(121)
 arcplot(star_edges, ordering=sample(1:10), labels=paste("node",1:10,sep="-"),
    lwd.arcs=4*runif(10,.5,2), col.arcs=hsv(runif(9,0.6,0.8),alpha=0.4),
+   pos.arcs=sample(c(-1,1),replace=T),
    show.nodes=TRUE, pch.nodes=21, cex.nodes=runif(10,1,3), 
    col.nodes="gray80", bg.nodes="gray90", lwd.nodes=2)
    
 # plot 4: same as plot 3 but vertically oriented
-set.seed(120)
+set.seed(121)
 op = par(mar = c(0.5, 5, 0.5, 3))
-arcplot(star_edges, ordering=sample(1:10), horizontal=FALSE,
-   labels=paste("node",1:10,sep="-"),
+arcplot(star_edges, ordering=sample(1:10), labels=paste("node",1:10,sep="-"),
    lwd.arcs=4*runif(10,.5,2), col.arcs=hsv(runif(9,0.6,0.8),alpha=0.4),
+   pos.arcs=sample(c(-1,1),replace=T),
    show.nodes=TRUE, pch.nodes=21, cex.nodes=runif(10,1,3), 
-   col.nodes="gray80", bg.nodes="gray90", lwd.nodes=2)
+   col.nodes="gray80", bg.nodes="gray90", lwd.nodes=2,
+   horizontal=F,srt=0,pos=3,offset=0.7)
 par(op)
 ```
 
