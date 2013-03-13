@@ -17,6 +17,8 @@
 #'(when provided, this parameter overrides \code{sorted=TRUE})
 #'@param horizontal logical indicating whether to plot in horizontal orientation
 #'@param col.arcs color for the arcs (default \code{"gray50"})
+#'@param pos.arcs whether the arc has to be plotted over (to the right if vertical)
+#'or under (to the left if vertical) the x (y if vertical) axe (default \code{1})
 #'@param lwd.arcs line width for the arcs (default 1)
 #'@param lty line type for the arcs (see \code{\link{par}})
 #'@param lend the line end style for the arcs (see \code{\link{par}})
@@ -34,15 +36,17 @@
 #'@param labels character vector with labels for the nodes
 #'@param col.labels color of the node labels (default \code{"gray50"})
 #'@param cex.labels expansion of node labels (default \code{"gray50"})
-#'@param las numeric in {0,1,2,3}; the style of axis labels (see \code{\link{par}})
+#'@param srt The string rotation in degrees (see \code{\link{par}})
 #'@param font font used for node labels (see \code{\link{par}})
 #'@param line on which margin line the node labels are displayed, 
 #'starting at 0 counting outwards (see \code{\link{mtext}})
-#'@param outer use outer margins, if available, to plot node labels
-#'(see \code{\link{mtext}})
-#'@param adj adjustment for each string in reading direction (see \code{\link{mtext}})
-#'@param padj adjustment for each string perpendicular to the reading direction
-#'(see \code{\link{mtext}})
+#'@param adj ane or two values which specify the x 
+#'(and optionally y) adjustment of the labels. (see \code{\link{text}})
+#'@param pos a position specifier for the text. If specified this overrides any adj value given.
+#'Values of 1, 2, 3 and 4, respectively indicate positions below,
+#'to the left of, above and to the right of the specified coordinates.
+#'@param offset when pos is specified, this value gives the offset of the label 
+#'from the specified coordinate in fractions of a character width.
 #'@param axes logical indicating whether to plot the axes (default \code{FALSE})
 #'@param ... further graphical parameters (see \code{\link{par}}), including
 #'\code{family}, \code{xpd}, \code{main}, \code{asp}, etc.
@@ -80,12 +84,12 @@
 #'
 arcplot <- function(
   edgelist, sorted = FALSE, decreasing = FALSE, ordering = NULL, horizontal = TRUE,
-  col.arcs = "#5998ff77", lwd.arcs = 1.8, lty = 1, lend = 1, ljoin = 2, lmitre = 1,
+  col.arcs = "#5998ff77", lwd.arcs = 1.8,pos.arcs = 1, lty = 1, lend = 1, ljoin = 2, lmitre = 1,
   show.nodes = FALSE, pch.nodes = 19, cex.nodes = 1, 
   col.nodes = "gray80", bg.nodes = "gray80", lwd.nodes = 1,
   show.labels = TRUE, labels = NULL, col.labels = "gray55",
-  cex.labels = 0.9, las = 2, font = 1, line = 0, 
-  outer = FALSE, adj = NA, padj = NA, axes=FALSE, ...)
+  cex.labels = 0.9, srt = 2, font = 1, 
+   adj = NULL, pos=NULL,offset=0, axes=FALSE, ...)
 {
   # ======================================================
   # Checking arguments
@@ -140,6 +144,9 @@ arcplot <- function(
   # line widths of arcs
   if (length(lwd.arcs) != num_edges) 
     lwd.arcs = rep(lwd.arcs, length=num_edges)
+  # position of arcs
+  if (length(pos.arcs) != num_edges) 
+    pos.arcs = rep(pos.arcs, length=num_edges)
   # line type of arcs
   if (length(lty) != num_edges) 
     lty = rep(lty, length=num_edges)
@@ -198,9 +205,9 @@ arcplot <- function(
     e_num[i,2] = centers[which(tmp == edgelist[i,2])]
   }    
   # maximum arc radius
-  radios = abs(e_num[,1] - e_num[,2]) / 2
-  max_radios = which(radios == max(radios))
-  max_rad = unique(radios[max_radios] / 2)
+  radios = abs(e_num[,1] - e_num[,2]) / 2 
+  top_max_rad = max(c(0.015,(max(radios*pos.arcs) / 2)))
+  bottom_max_rad = min(c(-0.015,(min(radios*pos.arcs) / 2)))
   # arc locations
   locs = rowSums(e_num) / 2
   
@@ -210,18 +217,21 @@ arcplot <- function(
   if (horizontal)
   {
     # open empty plot window
-    plot(0.5, 0.5, xlim=c(-0.015, 1.015), ylim=c(-0.01, 1*max_rad*2),
+    plot(0.5, 0.5, xlim=c(-0.015, 1.015), ylim=c(1*bottom_max_rad*2, 1*top_max_rad*2),
          type="n", xlab="", ylab="", axes=axes, ...)
+    #axis(1,pos=0)
+    
     # auxiliar variable for plotting arcs
     z = seq(0, pi, l=100)
+    
     # for each edge
     for (i in 1:num_edges)
     {
       # get radius length
       radio = radios[i]
       # x-y coords of each arc
-      x = locs[i] + radio * cos(z)
-      y = radio * sin(z)
+      x = locs[i] + radio * cos(z) 
+      y = radio * sin(z) * pos.arcs[i]
       # plot arc connecting nodes
       lines(x, y, col=col.arcs[i], lwd=lwd.arcs[i], lty=lty,
             lend=lend, ljoin=ljoin, lmitre=lmitre)
@@ -233,8 +243,8 @@ arcplot <- function(
     }
     # add node names with mtext
     if (show.labels) {
-      mtext(labels, side=1, line=line, at=centers, cex=cex.labels, outer=outer,
-            col=col.labels, las=las, font=font, adj=adj, padj=padj, ...)    
+      text(centers,-0.015,labels=labels,  cex=cex.labels, 
+           col=col.labels, srt=srt, font=font, adj=adj, offset=offset ,xpd=NA, ...)    
     }    
   }
   
@@ -244,8 +254,9 @@ arcplot <- function(
   if (!horizontal)
   {
     # open empty plot window
-    plot(0.5, 0.5, ylim=c(-0.015, 1.015), xlim=c(-0.01, 1*max_rad*2),
+    plot(0.5, 0.5, ylim=c(-0.015, 1.015), xlim=c(1*bottom_max_rad*2, 1*top_max_rad*2),
          type="n", xlab="", ylab="", axes=axes, ...)
+    #axis(2,pos=0)
     # auxiliar variable for plotting arcs
     z = seq(0, pi, l=100)
     # for each edge
@@ -255,7 +266,7 @@ arcplot <- function(
       radio = radios[i]
       # x-y coords of each arc
       y = locs[i] + radio * cos(z)
-      x = radio * sin(z)
+      x = radio * sin(z) * pos.arcs[i]
       # plot arc connecting nodes
       lines(x, y, col=col.arcs[i], lwd=lwd.arcs[i], lty=lty,
             lend=lend, ljoin=ljoin, lmitre=lmitre)
@@ -267,8 +278,8 @@ arcplot <- function(
     }
     # add node labels with mtext
     if (show.labels) {
-      mtext(labels, side=2, line=line, at=centers, cex=cex.labels, outer=outer,
-            col=col.labels, las=las, font=font, adj=adj, padj=padj, ...)    
+      text(-0.015,centers,labels=labels,  cex=cex.labels, 
+            col=col.labels, srt=srt, font=font, adj=adj, offset = offset , pos = pos,xpd=NA,...)    
     }
   }
 
