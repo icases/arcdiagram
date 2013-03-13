@@ -4,13 +4,14 @@
 \usage{
   arcplot(edgelist, sorted = FALSE, decreasing = FALSE,
     ordering = NULL, horizontal = TRUE,
-    col.arcs = "#5998ff77", lwd.arcs = 1.8, lty = 1,
-    lend = 1, ljoin = 2, lmitre = 1, show.nodes = FALSE,
-    pch.nodes = 19, cex.nodes = 1, col.nodes = "gray80",
-    bg.nodes = "gray80", lwd.nodes = 1, show.labels = TRUE,
-    labels = NULL, col.labels = "gray55", cex.labels = 0.9,
-    las = 2, font = 1, line = 0, outer = FALSE, adj = NA,
-    padj = NA, axes = FALSE, ...)
+    col.arcs = "#5998ff77", lwd.arcs = 1.8, pos.arcs = 1,
+    lty = 1, lend = 1, ljoin = 2, lmitre = 1,
+    show.nodes = FALSE, pch.nodes = 19, cex.nodes = 1,
+    col.nodes = "gray80", bg.nodes = "gray80",
+    lwd.nodes = 1, show.labels = TRUE, labels = NULL,
+    col.labels = "gray55", cex.labels = 0.9, srt = 90,
+    font = NULL, adj = NULL, pos = NULL, offset = 0.5,
+    axes = FALSE, xpd = NA, ...)
 }
 \arguments{
   \item{edgelist}{basically a two-column matrix with edges
@@ -31,6 +32,10 @@
 
   \item{col.arcs}{color for the arcs (default
   \code{"gray50"})}
+
+  \item{pos.arcs}{whether the arc has to be plotted over
+  (to the right if vertical) or under (to the left if
+  vertical) the x (y if vertical) axe (default \code{1})}
 
   \item{lwd.arcs}{line width for the arcs (default 1)}
 
@@ -75,8 +80,8 @@
   \item{cex.labels}{expansion of node labels (default
   \code{"gray50"})}
 
-  \item{las}{numeric in {0,1,2,3}; the style of axis labels
-  (see \code{\link{par}})}
+  \item{srt}{The string rotation in degrees (see
+  \code{\link{par}})}
 
   \item{font}{font used for node labels (see
   \code{\link{par}})}
@@ -85,21 +90,32 @@
   displayed, starting at 0 counting outwards (see
   \code{\link{mtext}})}
 
-  \item{outer}{use outer margins, if available, to plot
-  node labels (see \code{\link{mtext}})}
+  \item{adj}{ane or two values which specify the x (and
+  optionally y) adjustment of the labels. (see
+  \code{\link{text}})}
 
-  \item{adj}{adjustment for each string in reading
-  direction (see \code{\link{mtext}})}
+  \item{pos}{a position specifier for the text. If
+  specified this overrides any adj value given. Values of
+  1, 2, 3 and 4, respectively indicate positions below, to
+  the left of, above and to the right of the specified
+  coordinates.}
 
-  \item{padj}{adjustment for each string perpendicular to
-  the reading direction (see \code{\link{mtext}})}
+  \item{offset}{when pos is specified, this value gives the
+  offset of the label from the specified coordinate in
+  fractions of a character width.}
 
   \item{axes}{logical indicating whether to plot the axes
   (default \code{FALSE})}
 
+  \item{xpd}{A logical value or NA. If FALSE, all plotting
+  is clipped to the plot region, if TRUE, all plotting is
+  clipped to the figure region, and if NA, all plotting is
+  clipped to the device region, default to NA (see
+  \code{\link{par}}).}
+
   \item{...}{further graphical parameters (see
-  \code{\link{par}}), including \code{family}, \code{xpd},
-  \code{main}, \code{asp}, etc.}
+  \code{\link{par}}), including \code{family}, \code{main},
+  \code{asp}, etc.}
 }
 \description{
   Give me an edgelist and I'll help you plot a pretty damn
@@ -109,9 +125,9 @@
   The arcs are scaled such that they fit in a plot region
   with its x-axis ranging from zero to one. Node symbols
   and labels can be optionally displayed. Node symbols are
-  displayed through the function \code{points}. In turn,
-  node labels are displayed through the function
-  \code{mtext}.
+  displayed through the function \code{link{\points}}. In
+  turn, node labels are displayed through the function
+  \code{\link{text}}.
 }
 \examples{
 \dontrun{
@@ -131,9 +147,9 @@
  tree_edges = get.edgelist(tree_graph)
 
  # arc diagram
- arcplot(ring_edges, labels=V(ring_graph)$name, las=1)
- arcplot(star_edges, labels=V(star_graph)$name, las=2)
- arcplot(tree_edges, labels=V(tree_graph)$name, las=2)
+ arcplot(ring_edges, labels=V(ring_graph)$name, srt=0)
+ arcplot(star_edges, labels=V(star_graph)$name, srt=90)
+ arcplot(tree_edges, labels=V(tree_graph)$name, srt=90)
 
  # compare to plot.igraph
  plot(ring_graph, vertex.label=V(ring_graph)$name)
@@ -142,7 +158,7 @@
  }
 }
 \author{
-  Gaston Sanchez
+  Gaston Sanchez with contributions from I. Cases
 }
 \seealso{
   \code{\link{xynodes}}

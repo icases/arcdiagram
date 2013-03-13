@@ -7,8 +7,8 @@
 #'The arcs are scaled such that they fit in a plot region with its
 #'x-axis ranging from zero to one. Node symbols and labels can be
 #'optionally displayed. Node symbols are displayed through
-#'the function \code{points}. In turn, node labels are displayed
-#'through the function \code{mtext}.
+#'the function \code{\link{\points}}. In turn, node labels are displayed
+#'through the function \code{\link{text}}.
 #'
 #'@param edgelist basically a two-column matrix with edges (see \code{\link{graph}})
 #'@param sorted logical to indicate if nodes should be sorted (default \code{FALSE})
@@ -53,7 +53,7 @@
 #' to the device region, default to NA (see \code{\link{par}}).
 #'@param ... further graphical parameters (see \code{\link{par}}), including
 #'\code{family},  \code{main}, \code{asp}, etc.
-#'@author Gaston Sanchez
+#'@author Gaston Sanchez with contributions from I. Cases
 #'@seealso \code{\link{xynodes}}
 #'@export
 #'@examples
@@ -75,9 +75,9 @@
 #'  tree_edges = get.edgelist(tree_graph)
 #'
 #'  # arc diagram
-#'  arcplot(ring_edges, labels=V(ring_graph)$name, las=1)
-#'  arcplot(star_edges, labels=V(star_graph)$name, las=2)
-#'  arcplot(tree_edges, labels=V(tree_graph)$name, las=2)
+#'  arcplot(ring_edges, labels=V(ring_graph)$name, srt=0)
+#'  arcplot(star_edges, labels=V(star_graph)$name, srt=90)
+#'  arcplot(tree_edges, labels=V(tree_graph)$name, srt=90)
 #'  
 #'  # compare to plot.igraph
 #'  plot(ring_graph, vertex.label=V(ring_graph)$name)
